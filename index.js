@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const app = express()
 const port = process.env.PORT || 5000;
@@ -85,6 +85,15 @@ async function run() {
         app.get('/mytoys/:email', async (req, res) => {
             console.log(req.params.email);
             const result = await CarToysCollection.find({ sellerEmail: req.params.email }).toArray();
+            res.send(result)
+        })
+
+
+        app.delete('/mytoys/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log('please delete from database', id);
+            const query = { _id: new ObjectId(id) }
+            const result = await CarToysCollection.deleteOne(query)
             res.send(result)
         })
 

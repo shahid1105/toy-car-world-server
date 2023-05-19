@@ -82,6 +82,12 @@ async function run() {
         })
 
 
+        app.get('/mytoys/:email', async (req, res) => {
+            console.log(req.params.email);
+            const result = await CarToysCollection.find({ sellerEmail: req.params.email }).toArray();
+            res.send(result)
+        })
+
 
 
 

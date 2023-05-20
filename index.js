@@ -33,20 +33,14 @@ async function run() {
 
 
         // Creating index on one fields
-        const indexKeys = { ToyName: 1, };
-        const indexOptions = { name: "toyName" };
-        const result = await CarToysCollection.createIndex(indexKeys, indexOptions);
-        console.log(result);
-        console.log(
-            "Pinged your deployment. You successfully connected to MongoDB!"
-        );
+
 
         app.get("/search/:text", async (req, res) => {
             const text = req.params.text;
             const result = await CarToysCollection
                 .find({
                     $or: [
-                        { ToyName: { $regex: text, $options: "i" } },
+                        { name: { $regex: text, $options: "i" } },
                     ],
                 })
                 .toArray();
@@ -55,14 +49,12 @@ async function run() {
 
 
         app.get("/alltoys/:text", async (req, res) => {
-            console.log(req.params.id);
             const toys = await CarToysCollection
                 .find({
                     subCategory: req.params.category,
                 })
                 .toArray();
             res.send(toys);
-            console.log(toys);
         });
 
 
@@ -76,15 +68,51 @@ async function run() {
 
         app.post('/alltoys', async (req, res) => {
             const allToys = req.body;
-            console.log(allToys);
             const result = await CarToysCollection.insertOne(allToys);
             res.send(result)
         })
 
 
         app.get('/mytoys/:email', async (req, res) => {
-            console.log(req.params.email);
             const result = await CarToysCollection.find({ sellerEmail: req.params.email }).toArray();
+
+            res.send(result)
+        })
+
+
+        app.get('/mytoy/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await CarToysCollection.findOne(query)
+            res.send(result)
+        })
+
+        app.put('/mytoy/:id', async (req, res) => {
+            const id = req.params.id;
+            const toy = req.body;
+            console.log(toy);
+            const filter = { _id: new ObjectId(id) }
+            const options = { upsert: true };
+            const updatedToy = {
+                $set: {
+                    quantity: toy.quantity,
+                    details: toy.name,
+                    photo: toy.photo,
+                    price: toy.price
+                }
+            }
+            const result = await CarToysCollection.updateOne(filter, updatedToy, options)
+            console.log(result);
+            res.send(result)
+
+
+        })
+
+
+        app.get('/details/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await CarToysCollection.findOne(query)
             res.send(result)
         })
 

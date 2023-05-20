@@ -49,12 +49,19 @@ async function run() {
 
 
         app.get("/alltoys/:text", async (req, res) => {
-            const toys = await CarToysCollection
-                .find({
-                    subCategory: req.params.category,
-                })
-                .toArray();
+            if (req.params.text == "RegularCarToys" || req.params.text == "TruckToys" || req.params.text == "PoliceCarToys" || req.params.text == "FireTruckToys" || req.params.text == "sportsToys") {
+
+                const toys = await CarToysCollection
+                    .find({
+                        subCategory: req.params.text
+                    })
+                    .toArray();
+                console.log(toys);
+                res.send(toys);
+            }
+            const toys = await CarToysCollection.find({}).toArray();
             res.send(toys);
+
         });
 
 
@@ -107,6 +114,8 @@ async function run() {
 
 
         })
+
+
 
         app.get('/details/:id', async (req, res) => {
             const id = req.params.id;

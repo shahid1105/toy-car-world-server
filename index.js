@@ -95,9 +95,9 @@ async function run() {
             const options = { upsert: true };
             const updatedToy = {
                 $set: {
-                    quantity: toy.quantity,
-                    details: toy.name,
-                    photo: toy.photo,
+                    availableQuantity: toy.availableQuantity,
+                    description: toy.description,
+                    img: toy.img,
                     price: toy.price
                 }
             }
@@ -108,14 +108,12 @@ async function run() {
 
         })
 
-
         app.get('/details/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
             const result = await CarToysCollection.findOne(query)
             res.send(result)
         })
-
 
         app.delete('/mytoys/:id', async (req, res) => {
             const id = req.params.id;
@@ -128,6 +126,10 @@ async function run() {
 
 
 
+
+        app.use(function (req, res) {
+            res.status(404).send('<h1>404 - Page Not Found</h1><p>The requested page does not exist.</p>');
+        });
 
 
 

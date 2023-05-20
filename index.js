@@ -59,8 +59,7 @@ async function run() {
                 console.log(toys);
                 res.send(toys);
             }
-            const toys = await CarToysCollection.find({}).toArray();
-            res.send(toys);
+
 
         });
 

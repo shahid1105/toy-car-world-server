@@ -56,7 +56,6 @@ async function run() {
                         subCategory: req.params.text
                     })
                     .toArray();
-                console.log(toys);
                 res.send(toys);
             }
 
@@ -135,9 +134,6 @@ async function run() {
 
 
 
-        app.use(function (req, res) {
-            res.status(404).send('<h1>404 - Page Not Found</h1><p>The requested page does not exist.</p>');
-        });
 
 
 

@@ -32,6 +32,13 @@ async function run() {
         const CarToysCollection = client.db("toyCar").collection('alltoys');
 
 
+
+        app.get('/alltoys', async (req, res) => {
+            const cursor = CarToysCollection.find()
+            const result = await cursor.toArray()
+            res.send(result)
+        })
+
         // Creating index on one fields
 
 
@@ -61,13 +68,6 @@ async function run() {
 
 
         });
-
-
-        app.get('/alltoys', async (req, res) => {
-            const cursor = CarToysCollection.find()
-            const result = await cursor.toArray()
-            res.send(result)
-        })
 
 
 
